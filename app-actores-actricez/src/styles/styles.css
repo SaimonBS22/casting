@@ -1,0 +1,33 @@
+.h1{
+    color: violet;
+    margin-left: 40%;
+}
+.formulario{
+    display: flex;
+    flex-direction: column;
+    margin-left: 40%;
+    gap: 10px;
+}
+
+.input{
+    width: 300px;
+    border-radius: 2px;
+    border: solid 1px black;
+}
+
+.boton{
+    width: 300px;
+    border-radius: 2px;
+    border: solid 1px black;
+    cursor: pointer;
+}
+
+.boton:hover{
+    color: white;
+    background-color: black;
+}
+.textarea{
+    width: 300px;
+    border-radius: 2px;
+    border: solid 1px black;
+}
