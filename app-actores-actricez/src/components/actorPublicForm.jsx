@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/styles.css'
+import '../styles/styles.css';
 
 const ActorPublicForm = () => {
   const [foto, setFoto] = useState(null);
@@ -8,12 +8,12 @@ const ActorPublicForm = () => {
     edad: '',
     genero: '',
     altura: '',
-    descripcion: '',
-    email:'',
-    cuit:'',
-    celular:'',
-    dni:'',
-    nacionalidad:''
+    descripcion: [],
+    email: '',
+    cuit: '',
+    celular: '',
+    dni: '',
+    nacionalidad: ''
   });
 
   const [error, setError] = useState({
@@ -22,19 +22,29 @@ const ActorPublicForm = () => {
     genero: '',
     altura: '',
     descripcion: '',
-    email:'',
-    cuit:'',
-    celular:'',
-    dni:'',
-    nacionalidad:'',
+    email: '',
+    cuit: '',
+    celular: '',
+    dni: '',
+    nacionalidad: '',
     foto: '',
   });
 
   const handleChange = (e) => {
-    setFormulario({
-      ...formulario,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, selectedOptions } = e.target;
+
+    if (name === 'descripcion') {
+      const valoresSeleccionados = Array.from(selectedOptions, option => option.value);
+      setFormulario({
+        ...formulario,
+        descripcion: valoresSeleccionados
+      });
+    } else {
+      setFormulario({
+        ...formulario,
+        [name]: value,
+      });
+    }
   };
 
   const validateForm = () => {
@@ -45,75 +55,64 @@ const ActorPublicForm = () => {
       genero: '',
       altura: '',
       descripcion: '',
-      email:'',
-      cuit:'',
-      celular:'',
-      dni:'',
-      nacionalidad:'',
+      email: '',
+      cuit: '',
+      celular: '',
+      dni: '',
+      nacionalidad: '',
       foto: '',
     };
 
-    //Validacion Cuit
-    if(!formulario.cuit || !/^\d{2}-\d{8}-\d{1}$/.test(formulario.cuit)){
-      newError.cuit = 'El formato de cuit es xx-xxxxxxxx-x'
-      isValid = false
+    if (!formulario.cuit || !/^\d{2}-\d{8}-\d{1}$/.test(formulario.cuit)) {
+      newError.cuit = 'El formato de cuit es xx-xxxxxxxx-x';
+      isValid = false;
     }
 
-    //Validacion DNI
-    if(!formulario.dni || !/^\d{8}$/.test(formulario.dni)){
-      newError.dni = 'El DNI esta mal redactado'
-      isValid = false
-      }
-
-    //Validacion celular
-    if(!formulario.celular || !/^\d{10}$/.test(formulario.celular)){
-      newError.celular = 'El Celular esta mal redactado'
-      isValid = false
+    if (!formulario.dni || !/^\d{8}$/.test(formulario.dni)) {
+      newError.dni = 'El DNI está mal redactado';
+      isValid = false;
     }
 
-      //Validacion Cuit
-      if(!formulario.nacionalidad){
-        newError.nacionalidad = 'La nacionalidad es obligatorio'
-        isValid = false
-      }
-
-    //validacion de email
-    if(!formulario.email){
-      newError.email = 'El email es obligatorio'
-      isValid = false
+    if (!formulario.celular || !/^\d{10}$/.test(formulario.celular)) {
+      newError.celular = 'El celular está mal redactado';
+      isValid = false;
     }
 
-    // Validación de nombre
+    if (!formulario.nacionalidad) {
+      newError.nacionalidad = 'La nacionalidad es obligatoria';
+      isValid = false;
+    }
+
+    if (!formulario.email) {
+      newError.email = 'El email es obligatorio';
+      isValid = false;
+    }
+
     if (!formulario.nombre) {
       newError.nombre = 'El nombre es obligatorio';
       isValid = false;
     }
 
-    // Validación de edad
     if (!formulario.edad || formulario.edad < 10 || formulario.edad > 100) {
-      newError.edad = 'Ingrese una edad valida';
+      newError.edad = 'Ingrese una edad válida';
       isValid = false;
     }
 
-    // Validación de género
-    if (!formulario.genero || !['mujer', 'hombre', 'no especificar'].includes(formulario.genero.toLocaleLowerCase())) {
+    if (!formulario.genero || !['mujer', 'hombre', 'no especificar'].includes(formulario.genero.toLowerCase())) {
       newError.genero = 'El género es obligatorio';
       isValid = false;
     }
 
-    // Validación de altura
     if (!formulario.altura || formulario.altura <= 0 || formulario.altura >= 230) {
-      newError.altura = 'Ingrese una altura valida';
+      newError.altura = 'Ingrese una altura válida';
       isValid = false;
     }
 
-    // Validación de descripción
-    if (!formulario.descripcion) {
-      newError.descripcion = 'La descripción es obligatoria';
+    if (!formulario.descripcion || formulario.descripcion.length === 0) {
+      newError.descripcion = 'Debe seleccionar al menos una característica';
       isValid = false;
     }
 
-    // Validación de foto
     if (!foto) {
       newError.foto = 'La foto es obligatoria';
       isValid = false;
@@ -126,9 +125,8 @@ const ActorPublicForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar el formulario
     if (!validateForm()) {
-      return; // No hacer nada si hay errores
+      return;
     }
 
     const formData = new FormData();
@@ -136,13 +134,13 @@ const ActorPublicForm = () => {
     formData.append('edad', formulario.edad);
     formData.append('genero', formulario.genero);
     formData.append('altura', formulario.altura);
-    formData.append('descripcion', formulario.descripcion);
-    formData.append('email', formulario.email)
-    formData.append('cuit', formulario.cuit)
-    formData.append('dni', formulario.dni)
-    formData.append('celular', formulario.celular)
-    formData.append('nacionalidad', formulario.nacionalidad)
-    formData.append('foto', foto); // archivo
+    formData.append('descripcion', formulario.descripcion.join(', '));
+    formData.append('email', formulario.email);
+    formData.append('cuit', formulario.cuit);
+    formData.append('dni', formulario.dni);
+    formData.append('celular', formulario.celular);
+    formData.append('nacionalidad', formulario.nacionalidad);
+    formData.append('foto', foto);
 
     try {
       const res = await fetch('http://localhost:8080/api/actores', {
@@ -157,12 +155,12 @@ const ActorPublicForm = () => {
           edad: '',
           genero: '',
           altura: '',
-          descripcion: '',
-          email:'',
-          cuit:'',
-          celular:'',
-          dni:'',
-          nacionalidad:''
+          descripcion: [],
+          email: '',
+          cuit: '',
+          celular: '',
+          dni: '',
+          nacionalidad: ''
         });
         setFoto(null);
       } else {
@@ -176,7 +174,6 @@ const ActorPublicForm = () => {
   return (
     <form onSubmit={handleSubmit} className='formulario'>
       <h2>Subí tus datos para el casting</h2>
-
 
       <input
         className='input'
@@ -199,19 +196,18 @@ const ActorPublicForm = () => {
       />
       {error.edad && <span className="error">{error.edad}</span>}
 
-      <select  
+      <select
         className='input'
         name="genero"
-        placeholder="Género"
         value={formulario.genero}
         onChange={handleChange}
-        required >
-          <option value="">Seleccione una opcion</option>
+        required
+      >
+        <option value="">Seleccione una opción</option>
         <option value="Hombre">Hombre</option>
         <option value="Mujer">Mujer</option>
         <option value="No especificar">No especificar</option>
       </select>
-
       {error.genero && <span className="error">{error.genero}</span>}
 
       <input
@@ -225,71 +221,81 @@ const ActorPublicForm = () => {
       />
       {error.altura && <span className="error">{error.altura}</span>}
 
-
-      <input 
-      className='input'
-      name='email'
-      type="email" 
-      placeholder='ejemplo@mail.com'
-      value={formulario.email}
-      onChange={handleChange}
-      required
-      />
-      {error.email && <span className='error'>{error.email}</span>}
-
-      <input 
-      className='input'
-      name='cuit'
-      type="text" 
-      placeholder='Cuit'
-      value={formulario.cuit}
-      onChange={handleChange}
-      required
-      />
-      {error.cuit && <span className='error'>{error.cuit}</span>}
-
-      <input 
-      className='input'
-      name='dni'
-      type="number" 
-      placeholder='DNI'
-      value={formulario.dni}
-      onChange={handleChange}
-      required
-      />
-      {error.dni && <span className='error'>{error.dni}</span>}
-
-      <input 
-      className='input'
-      name='celular'
-      type="number" 
-      placeholder='Celular'
-      value={formulario.celular}
-      onChange={handleChange}
-      required
-      />
-      {error.celular && <span className='error'>{error.celular}</span>}
-
-      <input 
-      className='input'
-      name='nacionalidad'
-      type="string" 
-      placeholder='Nacionalidad'
-      value={formulario.nacionalidad}
-      onChange={handleChange}
-      required
-      />
-      {error.nacionalidad && <span className='error'>{error.nacionalidad}</span>}
-
-      <textarea
-        className='textarea'
-        name="descripcion"
-        placeholder="Descripción breve"
-        value={formulario.descripcion}
+      <input
+        className='input'
+        name='email'
+        type="email"
+        placeholder='ejemplo@mail.com'
+        value={formulario.email}
         onChange={handleChange}
         required
       />
+      {error.email && <span className='error'>{error.email}</span>}
+
+      <input
+        className='input'
+        name='cuit'
+        type="text"
+        placeholder='Cuit'
+        value={formulario.cuit}
+        onChange={handleChange}
+        required
+      />
+      {error.cuit && <span className='error'>{error.cuit}</span>}
+
+      <input
+        className='input'
+        name='dni'
+        type="number"
+        placeholder='DNI'
+        value={formulario.dni}
+        onChange={handleChange}
+        required
+      />
+      {error.dni && <span className='error'>{error.dni}</span>}
+
+      <input
+        className='input'
+        name='celular'
+        type="number"
+        placeholder='Celular'
+        value={formulario.celular}
+        onChange={handleChange}
+        required
+      />
+      {error.celular && <span className='error'>{error.celular}</span>}
+
+      <input
+        className='input'
+        name='nacionalidad'
+        type="text"
+        placeholder='Nacionalidad'
+        value={formulario.nacionalidad}
+        onChange={handleChange}
+        required
+      />
+      {error.nacionalidad && <span className='error'>{error.nacionalidad}</span>}
+
+      <label className='label-descripcion'>Características físicas:</label>
+      <select
+        className='textarea'
+        name="descripcion"
+        value={formulario.descripcion}
+        onChange={handleChange}
+        required
+        multiple
+      >
+        <option value="tez clara">Tez clara</option>
+        <option value="tez oscura">Tez oscura</option>
+        <option value="ojos claros">Ojos claros</option>
+        <option value="ojos oscuros">Ojos oscuros</option>
+        <option value="pelo castaño">Pelo castaño</option>
+        <option value="pelo rubio">Pelo rubio</option>
+        <option value="pelo negro">Pelo negro</option>
+        <option value="pelo pelirrojo">Pelo pelirrojo</option>
+      </select>
       {error.descripcion && <span className="error">{error.descripcion}</span>}
+
       <input
         className='input'
         type="file"
@@ -298,8 +304,6 @@ const ActorPublicForm = () => {
         required
       />
       {error.foto && <span className="error">{error.foto}</span>}
-
-
 
       <button className='boton' type="submit">Enviar</button>
     </form>

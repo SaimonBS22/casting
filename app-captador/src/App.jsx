@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ActorList from './components/actorList.jsx';
+import './app.css';
 
 const App = () => {
   const [actores, setActores] = useState([]);
@@ -49,50 +50,57 @@ const App = () => {
   }, [filtros]);
 
   return (
-    <div>
+    <div className='contenedorPadre'>
       <h1>Plataforma de Casting</h1>
-
-      <div>
+      <ActorList actores={actores} eliminarActor={eliminarActor} editarActor={editarActor} />
+      <div className='contenedorFiltros'>
         <h2>Filtros</h2>
-        <input
-          type="number"
-          placeholder="Edad mínima"
-          value={filtros.edadMin}
-          onChange={(e) => setFiltros({ ...filtros, edadMin: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Edad máxima"
-          value={filtros.edadMax}
-          onChange={(e) => setFiltros({ ...filtros, edadMax: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Filtrar por género"
-          value={filtros.genero}
-          onChange={(e) => setFiltros({ ...filtros, genero: e.target.value })}
-        />
-        <input
+          <div className='contenedorInput'>
+          <input
             type="number"
-            placeholder="Altura mínima"
-            value={filtros.alturaMin}
-            onChange={(e) => setFiltros({ ...filtros, alturaMin: e.target.value })}
+            placeholder="Edad mínima"
+            value={filtros.edadMin}
+            onChange={(e) => setFiltros({ ...filtros, edadMin: e.target.value })}
+            className='inputFiltro'
           />
-        <input
-          type="number"
-          placeholder="Altura máxima"
-          value={filtros.alturaMax}
-          onChange={(e) => setFiltros({ ...filtros, alturaMax: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Filtrar por descripción"
-          value={filtros.descripcion}
-          onChange={(e) => setFiltros({ ...filtros, descripcion: e.target.value })}
-        />
+          <input
+            type="number"
+            placeholder="Edad máxima"
+            value={filtros.edadMax}
+            onChange={(e) => setFiltros({ ...filtros, edadMax: e.target.value })}
+            className='inputFiltro'
+          />
+          <input
+            type="text"
+            placeholder="Filtrar por género"
+            value={filtros.genero}
+            onChange={(e) => setFiltros({ ...filtros, genero: e.target.value })}
+            className='inputFiltro'
+          />
+          <input
+              type="number"
+              placeholder="Altura mínima"
+              value={filtros.alturaMin}
+              onChange={(e) => setFiltros({ ...filtros, alturaMin: e.target.value })}
+              className='inputFiltro'
+            />
+          <input
+            type="number"
+            placeholder="Altura máxima"
+            value={filtros.alturaMax}
+            onChange={(e) => setFiltros({ ...filtros, alturaMax: e.target.value })}
+            className='inputFiltro'
+          />
+          <input
+            type="text"
+            placeholder="Filtrar por descripción"
+            value={filtros.descripcion}
+            onChange={(e) => setFiltros({ ...filtros, descripcion: e.target.value })}
+            className='inputFiltro'
+          />
+          </div>
       </div>
 
-      <ActorList actores={actores} eliminarActor={eliminarActor} editarActor={editarActor} />
     </div>
   );
 };

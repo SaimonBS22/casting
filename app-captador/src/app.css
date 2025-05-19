@@ -1,0 +1,20 @@
+.contenedorPadre{
+    margin-bottom: 200px;
+}
+
+.contenedorFiltros{
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedorInput{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+}
+
+.inputFiltro{
+    height: 15px;
+    width: 150px;
+}
